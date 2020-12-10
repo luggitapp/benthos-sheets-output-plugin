@@ -3,8 +3,8 @@ image:
   tag: latest
 
 secrets:
-  serviceAccountSecretName: firebase-service-account
-  serviceAccountSecretSubPath: firebase-sva.json
+  serviceAccountSecretName: google-service-account
+  serviceAccountSecretSubPath: sva.json
 
 config:
   http:
@@ -13,28 +13,24 @@ config:
   input:
     nats:
       urls:
-        - nats://nats.qa.svc.cluster.local:4222
+        - nats://nats:4222
       queue: benthos_queue
-      subject: external.checkout.request
+      subject: test-sheet
 
   pipeline:
     processors:
       - bloblang: |
           root = [
-            createdBy, 
-            pickupAddress, 
-            pickupPostalCode, 
-            deliveryAddress, 
-            deliveryPostalCode, 
-            pickupDate, 
-            deliveryDate
+            field1, 
+            field2, 
+            field3,
           ]
     threads: 1
 
   output:
     type: sheets
     plugin:
-      sheetId: "1z5W9eXXzr9fG0lYcTtXSgtYfnusIPCuAIomsZvhkO5s"
+      sheetId: "<your-sheet-id>"
 
   logger:
     prefix: benthos

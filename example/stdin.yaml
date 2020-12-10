@@ -4,9 +4,9 @@ input:
 pipeline:
   processors:
   - bloblang: |
-      root = [this.draftId, this.test]
+      root = [field1, field2]
 
 output:
   type: sheets
   plugin:
-    sheetId: "1z5W9eXXzr9fG0lYcTtXSgtYfnusIPCuAIomsZvhkO5s"
+    sheetId: "<your-sheet-id>"
