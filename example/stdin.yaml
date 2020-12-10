@@ -1,0 +1,12 @@
+input:
+  type: stdin
+
+pipeline:
+  processors:
+  - bloblang: |
+      root = [this.draftId, this.test]
+
+output:
+  type: sheets
+  plugin:
+    sheetId: "1z5W9eXXzr9fG0lYcTtXSgtYfnusIPCuAIomsZvhkO5s"

@@ -1,0 +1,7 @@
+image:
+  name: luggitapp/benthos-sheets-output-plugin
+  tag: latest
+
+secrets:
+  serviceAccountSecretName: google-service-account
+  serviceAccountSecretSubPath: service-account.json 

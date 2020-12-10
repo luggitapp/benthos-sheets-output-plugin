@@ -1,0 +1,43 @@
+image:
+  name: luggitapp/benthos-sheets-output-plugin
+  tag: latest
+
+secrets:
+  serviceAccountSecretName: firebase-service-account
+  serviceAccountSecretSubPath: firebase-sva.json
+
+config:
+  http:
+    address: ${HTTP_ADDRESS:0.0.0.0:4195}
+    
+  input:
+    nats:
+      urls:
+        - nats://nats.qa.svc.cluster.local:4222
+      queue: benthos_queue
+      subject: external.checkout.request
+
+  pipeline:
+    processors:
+      - bloblang: |
+          root = [
+            createdBy, 
+            pickupAddress, 
+            pickupPostalCode, 
+            deliveryAddress, 
+            deliveryPostalCode, 
+            pickupDate, 
+            deliveryDate
+          ]
+    threads: 1
+
+  output:
+    type: sheets
+    plugin:
+      sheetId: "1z5W9eXXzr9fG0lYcTtXSgtYfnusIPCuAIomsZvhkO5s"
+
+  logger:
+    prefix: benthos
+    level: ALL
+    format: json
+    add_timestamp: true

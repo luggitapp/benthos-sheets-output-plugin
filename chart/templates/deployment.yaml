@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Release.Name }}
+    chart: {{ .Release.Name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: processor
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+          env:
+            - name: HTTP_ADDRESS
+              value: "0.0.0.0:4195"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/service-account.json            
+          volumeMounts:
+          - name: configs
+            mountPath: /benthos.yaml
+            subPath: benthos.yaml
+          - name: google-service-account
+            mountPath: /var/secrets/google/service-account.json
+            subPath: {{ .Values.secrets.serviceAccountSecretSubPath }}
+          resources:
+            requests:
+              memory: "30Mi"
+            limits:
+              memory: "50Mi"
+          ports:
+            - containerPort: 4195
+      volumes:
+      - name: configs
+        configMap:
+          name: {{ .Release.Name }}-config
+      - name: google-service-account
+        secret:
+          secretName: {{ .Values.secrets.serviceAccountSecretName }}

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  benthos.yaml: |-
+{{ .Values.config | toYaml | indent 4 | toString }}
