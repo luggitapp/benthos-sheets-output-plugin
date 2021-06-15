@@ -10,7 +10,11 @@ FROM busybox AS package
 WORKDIR /
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /etc/passwd /etc/passwd
+COPY --from=builder /usr/local/go/lib/time/zoneinfo.zip /zoneinfo.zip
 COPY --from=build /build/sheets-plugin .
+
+ENV ZONEINFO=/zoneinfo.zip
 EXPOSE 4195
+
 ENTRYPOINT ["/sheets-plugin"]
 CMD ["-c", "/benthos.yaml"]
